@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ClientHandler.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>

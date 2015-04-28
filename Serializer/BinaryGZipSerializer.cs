@@ -158,7 +158,7 @@ namespace Serializer
             if (String.Compare(name, type.FullName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 throw new ArgumentException(String.Format(
-                    "Stream does not contains info for serialization type of {0}", type.FullName));
+                    "Stream does not contains info for deserialization type of {0}", type.FullName));
             }
             var fields =
                 type.GetFields(BindingFlags)

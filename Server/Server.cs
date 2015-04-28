@@ -1,20 +1,20 @@
 ﻿using System;
-using System.IO;
-using DTO;
-using Serializer;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Server
 {
-    class Server
+    internal class Server
     {
         public static void Main()
         {
-            using (var stream = new MemoryStream(1024))
-            {
-                var newTourist = (Tourist)BinaryGZipSerializer.Deserialize(stream, typeof(Tourist));
-                Console.WriteLine(newTourist); 
-                Console.WriteLine(newTourist.Address);
-            }
+            Console.WriteLine("Server started");
+            var listener = new TcpListener(IPAddress.Any, 11000);
+            listener.Start();
+            var clientHandler = new ClientHandler(listener.AcceptTcpClient());
+            listener.Stop();
+            Console.WriteLine(clientHandler.Tourist);
+            Console.WriteLine(clientHandler.Tourist.Address);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net.Sockets;
+using System.Text;
 using DTO;
 using Serializer;
 
@@ -9,7 +11,7 @@ namespace Client
     {
         public static void Main()
         {
-            Console.WriteLine("Hello world!!!");
+            Console.WriteLine("Client started");
             var tourist = new Tourist()
             {
                 FirstName = "Test",
@@ -42,7 +44,21 @@ namespace Client
             using (var stream = new MemoryStream(1024))
             {
                 BinaryGZipSerializer.Serialize(stream, tourist);
-                var newTourist = (Tourist)BinaryGZipSerializer.Deserialize(stream, typeof(Tourist));
+                Console.WriteLine("Client serialized:");
+                Console.WriteLine(tourist);
+                Console.WriteLine(tourist.Address);
+                var client = new TcpClient("localhost", 11000);
+                var serverStream = client.GetStream();
+                stream.WriteTo(serverStream);
+                string response = String.Empty;
+                byte[] buffer = new byte[1024];
+                int count;
+                while ((count = serverStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    response += Encoding.ASCII.GetString(buffer, 0, count);
+                } 
+                Console.WriteLine("Client send object to server");
+                Console.WriteLine("Server say: {0}", response);
             }
         }
     }
